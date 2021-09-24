@@ -1,13 +1,27 @@
     
 
 // Create the application helper and add its render target to the page
-let app = new PIXI.Application({ backgroundColor: 0x2900b9, width: xsize, height:ysize });
+let app = new PIXI.Application({ backgroundColor: 0xffffff, width: xsize, height:ysize });
 document.body.appendChild(app.view);
+
+function loadBackground() {
+    let name = "bg.png";
+
+    let s = PIXI.Sprite.from(name);
+    app.stage.addChild(s);
+}
+
+
+loadBackground();
 
 
 
 createPegBoard();
 createPrizeCounters();
+
+app.stage.scale.x = 0.8;
+app.stage.scale.y = 0.8;
+
 
 
 // Add a ticker callback to move the sprite back and forth
@@ -66,7 +80,9 @@ app.ticker.add((delta) => {
         }
 
         while(destroyBalls.length > 0) {
-            console.log(balls[destroyBalls[0]].sprite);
+            assert(destroyBalls[0] >= 0 && destroyBalls[0] < balls.length, "out of bounds");
+            assert(balls[destroyBalls[0]].hasOwnProperty('sprite'), "sprite doesn't exist");
+            
             app.stage.removeChild(balls[destroyBalls[0]].sprite);  
             balls.splice(destroyBalls[0], 1);     
             destroyBalls.splice(0,1);

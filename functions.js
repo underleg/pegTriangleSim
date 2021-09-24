@@ -1,9 +1,5 @@
 
-function assert(condition, message) {
-    if (!condition) {
-        throw new Error(message || "Assertion failed");
-    }
-}
+
 
 
 // Create the sprite and add it to the stage
@@ -62,10 +58,10 @@ function createBall(recordIdx = -1) {
         recorded = true;
     }
 
-    let name = "yellow.png";
+    let name = "ball.png";
 
     if(recorded) {
-        name = "red.png";
+        name = "ball.png";
     }
    
     let y = startY;
@@ -140,18 +136,19 @@ function recycleBall(ball) {
 // singlepeg contructor
 function addPeg(id, x,y) {
     // Create the sprite and add it to the stage
-    let sprite = PIXI.Sprite.from('blue.png');
+    let name = "peg.png";
+    let sprite = PIXI.Sprite.from(name);
     app.stage.addChild(sprite);
-    sprite.scale.x = ballScale;
-    sprite.scale.y = ballScale;
+    sprite.scale.x = pegScale;
+    sprite.scale.y = pegScale;
 
-    sprite.x = x - radius;
+    sprite.x = x - radius*2;
     sprite.y = y - radius;
 
     let pegText = new PIXI.Text(0, fontStyle);
     pegText.x = radius/2;
     pegText.y = radius/2;
-    sprite.addChild(pegText);
+    //sprite.addChild(pegText);
 
     pegs[pegs.length] = {id:id, x:x,y:y,sprite:sprite, text: pegText, count:0};
 }
@@ -161,8 +158,8 @@ function addPeg(id, x,y) {
 function createPegBoard() {
     
     let x = xsize / 2;
-    let y = 150;
-    let step = 100;
+    let y = 120;
+    let step = 67;
     let pegCount = 1;
 
     // row 1
@@ -182,7 +179,7 @@ function createPegBoard() {
         startX -= step/2;
     }
 
-    pegYLine = y;
+    pegYLine = y + 40;
 
 }
 
@@ -319,16 +316,16 @@ function randomStartXVariation() {
 function moveBall(ball, timeDelta) {
     ball.x += ball.dx * timeDelta;
     ball.y += ball.dy * timeDelta;
-    ball.sprite.x = ball.x - radius;
-    ball.sprite.y = ball.y - radius;
+    ball.sprite.x = ball.x - ball_radius;
+    ball.sprite.y = ball.y - ball_radius;
 }
 
 
 function revertBallMove(ball, timeDelta) {
     ball.x -= ball.dx * timeDelta;
     ball.y -= ball.dy * timeDelta;
-    ball.sprite.x = ball.x - radius;
-    ball.sprite.y = ball.y - radius;
+    ball.sprite.x = ball.x - ball_radius;
+    ball.sprite.y = ball.y - ball_radius;
 }
 
 function incrementCounts(ball, peg) {
@@ -350,10 +347,12 @@ function incrementCounts(ball, peg) {
 }
 
 function getRandomDirection(ball) {
-    assert(ball.randomDirections.length > ball.randomIdx);
-    let res = ball.randomDirections[ball.randomIdx];
-    ball.randomIdx = (ball.randomIdx % randomsDirectionsPerBall);
-    return res;
+    if(ball.randomDirections.length > ball.randomIdx) {
+        let res = ball.randomDirections[ball.randomIdx];
+        ball.randomIdx = (ball.randomIdx % randomsDirectionsPerBall);
+        return res;
+    }
+    else return -1;
 }
 
 
@@ -385,6 +384,7 @@ function bounceAway(ball, peg, timeDelta) {
 
     // make sure there's x movement
     if(ball.dx > -dxLim && ball.dx < dxLim) {
+        console.log("X");
         if (getRandomDirection(ball) == -1) {
             ball.dx = -dxLim;
         } else {
