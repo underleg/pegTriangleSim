@@ -55,6 +55,12 @@ app.ticker.add((delta) => {
     if (slowmo) {
         tint.visible = true;
         iterations = 1;
+        if (tint.alpha < 1) {
+            tint.alpha += tintFadeStep;
+        }      
+    }
+    else {
+        tint.alpha = 0;
     }
 
     for(let it = 0; it < iterations; ++ it) {

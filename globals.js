@@ -18,6 +18,8 @@ let prizeSteam = false;
 let slowmoLine = 0;
 
 let tint = null;
+let tintFadeStep = 0.02;
+
 
 let pegXOffset = 6;
 
