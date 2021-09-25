@@ -153,8 +153,8 @@ function addPeg(id, x,y) {
     sprite.scale.x = pegScale;
     sprite.scale.y = pegScale;
 
-    sprite.x = x - radius*1.7;
-    sprite.y = y - radius - 5 ;
+    sprite.x = x - radius;
+    sprite.y = y - radius ;
 
     let pegText = new PIXI.Text(0, fontStyle);
     pegText.x = radius/2;
@@ -168,8 +168,8 @@ function addPeg(id, x,y) {
 // create whole peg board
 function createPegBoard() {
     
-    let x = xsize / 2;
-    let y = 120;
+    let x = xsize / 2 - 6;
+    let y = 120 + 14;
     let step = 67;
     let pegCount = 1;
 
@@ -190,7 +190,7 @@ function createPegBoard() {
         startX -= step/2;
     }
 
-    pegYLine = y + 70;
+    pegYLine = y + 60;
     slowmoLine = pegYLine - 100;
 
 }
@@ -248,8 +248,8 @@ function createPrizeCounters() {
 
 function createPrizeParticles(x,y) {
     let emitters = [];
-    emitters[0] = createPrizeEmitter2(app.stage);
-    emitters[1] = createPrizeEmitter1(app.stage);
+    emitters[0] = createPrizeEmitter1(app.stage);
+    emitters[1] = createPrizeEmitter2(app.stage);
     emitters[2] = createPrizeEmitter3(app.stage);
 
     for(let i = 0; i > emitters.length; ++i) {
@@ -353,8 +353,6 @@ function countPrize(ball) {
     }
 }
 
-
-
 function isColliding(x1,y1,x2,y2) {
     let d2 = (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2);
     if(d2 < diameter*diameter)
@@ -423,8 +421,6 @@ function getRandomDirection(ball) {
     }
     else return -1;
 }
-
-
 
 function bounceAway(ball, peg, timeDelta) {
     // get unit vector from peg to ball

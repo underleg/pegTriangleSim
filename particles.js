@@ -310,7 +310,7 @@ function createPrizeEmitter2(stage) {
             "blendMode": "normal", // add, normal, multiply, screen
             "frequency": 0.001,
             "emitterLifetime": 0.1,
-            "maxParticles": 30,
+            "maxParticles": 10,
             "addAtBack": true,
             "pos": {
                 "x": 0,
@@ -473,8 +473,8 @@ function createPrizeEmitter3(stage) {
                 {
                     "type": "moveSpeedStatic",
                     "config": {
-                        "min": 1500,
-                        "max": 2500
+                        "min": 800,
+                        "max": 1600
                     }
                 },
                 {
@@ -519,8 +519,8 @@ function createPrizeEmitter3(stage) {
                         "accel": 0,
                         "minSpeed": 0,
                         "maxSpeed": 1,
-                        "minStart": 250,
-                        "maxStart": 290
+                        "minStart": 250 - 40,
+                        "maxStart": 290 + 40
                     }
                 },
                 {
