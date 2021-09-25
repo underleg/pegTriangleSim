@@ -20,3 +20,5 @@ let slowmoLine = 0;
 let tint = null;
 
 let pegXOffset = 6;
+
+let rndPeg = 7;

@@ -90,7 +90,7 @@ app.ticker.add((delta) => {
                     balls[i].emitter.update(delta * 0.001);
                 }
                 
-                if(balls[i].y > slowmoLine) {
+                if (balls.length == 1 && balls[i].y > slowmoLine) {
                     slowmo = true;
                 }
                 

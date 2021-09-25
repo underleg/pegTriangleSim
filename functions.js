@@ -69,7 +69,7 @@ function createBall(recordIdx = -1) {
     if(recorded) {
         x = ballRecords[recordIdx].startX;
     } else {
-        x += (xsize / 2) + randomStartXVariation() - pegXOffset;
+        x += (xsize / 2) + randomStartXVariation() - (pegXOffset);
     }
 
     let emitter = createBallEmitter(app.stage);
@@ -129,7 +129,7 @@ function createBall(recordIdx = -1) {
 // ball has hit the bottom of the triangle - reset it to the top
 function recycleBall(ball) {
     ball.y = startY;
-    ball.x = (xsize / 2) + randomStartXVariation();
+    ball.x = (xsize / 2) + randomStartXVariation() - (pegXOffset);
     ball.startX = ball.x;
     ball.dx = 0;
     ball.dy = 0;     
@@ -140,26 +140,42 @@ function recycleBall(ball) {
     ball.bounceRecord = [];
     ball.repeatBounceCount = 0;
 
+    rndPeg = Math.floor(Math.random() * 21);
+
+    updatePegs();
+
 }
 
 // singlepeg contructor
 function addPeg(id, x,y) {
     // Create the sprite and add it to the stage
-    let name = "peg.png";
+    let name = "peg.png"; 
     let sprite = PIXI.Sprite.from(name);
     app.stage.addChild(sprite);
     sprite.scale.x = pegScale;
     sprite.scale.y = pegScale;
 
     sprite.x = x - radius;
-    sprite.y = y - radius ;
+    sprite.y = y - radius;
+
+    // Create the alternate sprite and add it to the stage
+    name = "peg_pink.png";
+    let sprite2 = PIXI.Sprite.from(name);
+    app.stage.addChild(sprite2);
+    sprite2.scale.x = pegScale;
+    sprite2.scale.y = pegScale;
+
+    sprite2.x = x - radius;
+    sprite2.y = y - radius;
+    sprite2.visible = false;
+    
 
     let pegText = new PIXI.Text(0, fontStyle);
     pegText.x = radius/2;
     pegText.y = radius/2;
     //sprite.addChild(pegText);
 
-    pegs[pegs.length] = {id:id, x:x,y:y,sprite:sprite, text: pegText, count:0};
+    pegs[pegs.length] = { id: id, x: x, y: y, sprite: sprite, sprite2: sprite2, text: pegText, count:0};
 }
 
 
@@ -191,6 +207,20 @@ function createPegBoard() {
     pegYLine = y + 60;
     slowmoLine = pegYLine - 100;
 
+    updatePegs();
+
+}
+
+function updatePegs() {
+    for (let i = 0; i < pegs.length; ++i) {
+        if (i == rndPeg) {
+            pegs[i].sprite.visible = false;
+            pegs[i].sprite2.visible = true;
+        } else {
+            pegs[i].sprite2.visible = false;
+            pegs[i].sprite.visible = true;
+        }
+    }
 }
 
 

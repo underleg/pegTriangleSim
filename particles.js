@@ -28,7 +28,7 @@ function createBallEmitter(stage) {
             "blendMode": "multiply", // add, normal, multiply, screen
             "frequency": 0.005,
             "emitterLifetime": 0,
-            "maxParticles": 30,
+            "maxParticles": 25,
             "addAtBack": true,
             "pos": {
                 "x": 0,
