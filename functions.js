@@ -58,6 +58,8 @@ function createBall(recordIdx = -1) {
         recorded = true;
     }
 
+    
+
     let name = "ball.png";
 
     if(recorded) {
@@ -71,6 +73,13 @@ function createBall(recordIdx = -1) {
     } else {
         x += (xsize / 2) + randomStartXVariation();
     }
+
+    let emitter = createBallEmitter(app.stage);
+    emitter.emit = true;
+    emitter.resetPositionTracking();
+    emitter.updateOwnerPos(x,y);
+
+
     
     ballcount++;
     let s = PIXI.Sprite.from(name);
@@ -99,6 +108,9 @@ function createBall(recordIdx = -1) {
         }
     }
 
+
+    
+
     let res = { recordIdx: recordIdx,
                 id: ballcount, 
                 x:x, y:y, 
@@ -112,7 +124,8 @@ function createBall(recordIdx = -1) {
                 count: 0,
                 lastPegHit: -1,
                 bounceRecord: [],
-                repeatBounceCount:0};
+                repeatBounceCount:0,
+                emitter: emitter};
     return res;
 }
 
@@ -142,8 +155,8 @@ function addPeg(id, x,y) {
     sprite.scale.x = pegScale;
     sprite.scale.y = pegScale;
 
-    sprite.x = x - radius*2;
-    sprite.y = y - radius;
+    sprite.x = x - radius*1.7;
+    sprite.y = y - radius - 5 ;
 
     let pegText = new PIXI.Text(0, fontStyle);
     pegText.x = radius/2;
@@ -179,7 +192,8 @@ function createPegBoard() {
         startX -= step/2;
     }
 
-    pegYLine = y + 40;
+    pegYLine = y + 70;
+    slowmoLine = pegYLine - 100;
 
 }
 
@@ -218,39 +232,96 @@ function createPrizeCounters() {
         fill: ['#ffffff'], 
     });
 
-    let x = (xsize / 2) - (100 * 3);
+    let x = (xsize / 2) - (60 * 3);
 
     for(let i = 0; i < 7; ++i) {
 
         let cntrText = new PIXI.Text(0, style);
         cntrText.x = x;
-        cntrText.y = 100 * 6;
+        cntrText.y = 100 * 9 + 50;
         app.stage.addChild(cntrText);
 
         prizeCounts[prizeCounts.length] = { id: (i+1), text: cntrText, count: 0 };
 
-        x += 100;
+        x += 60;
     }
 }
+
+
+function createPrizeParticles(x,y) {
+    let emitters = [];
+    emitters[0] = createPrizeEmitter2(app.stage);
+    emitters[1] = createPrizeEmitter1(app.stage);
+    emitters[2] = createPrizeEmitter3(app.stage);
+
+    for(let i = 0; i > emitters.length; ++i) {
+        
+        emitters[i].emit = false;
+        emitters[i].resetPositionTracking();
+        emitters[i].updateOwnerPos(x,y);
+    }
+    return emitters;
+}
+
+
+function createAllPrizeEmitters() {
+    prizeEmitters[0] = createPrizeParticles(400,800);
+    togglePrizeEmitters(false);
+}
+
+function togglePrizeEmitters(tf) {
+    
+    for(let i = 0; i < prizeEmitters.length; ++i) {
+        let e = prizeEmitters[i];
+        for(let j = 0; j < e.length; ++j) {
+            e[j].emit = tf;
+        }
+    }
+}
+
+
+function updateAllPrizeEmitters(delta) {
+    
+    for(let i = 0; i < prizeEmitters.length; ++i) {
+        let e = prizeEmitters[i];
+
+        for(let j = 0; j < e.length; ++j) {
+        
+            e[j].resetPositionTracking();
+            e[j].updateOwnerPos(prizeX,460); 
+            
+            e[j].update(delta * 0.001);
+        }
+    }
+}
+
 
 
 // count which bucket the ball has fallen into based on x coord
 let numPrizesAwarded = 0;
 function countPrize(ball) {
+    togglePrizeEmitters(true);
     let idx = 0;
     if(ball.x < pegs[15].x) {
         idx = 0;
+        prizeX = 50;
     } else if(ball.x < pegs[16].x) {
         idx = 1;
+        prizeX =131; 
     }else if(ball.x < pegs[17].x) {
         idx = 2;
+        prizeX = 205;
     }else if(ball.x < pegs[18].x) {
         idx = 3;
+        prizeX = 270;
     }else if(ball.x < pegs[19].x) {
         idx = 4;
+        prizeX = 336;
     }else if(ball.x < pegs[20].x) {
+        prizeX = 410;
         idx = 5;
     }else {
+        prizeX = 490;
         idx = 6;
     }
 
@@ -384,7 +455,7 @@ function bounceAway(ball, peg, timeDelta) {
 
     // make sure there's x movement
     if(ball.dx > -dxLim && ball.dx < dxLim) {
-        console.log("X");
+        
         if (getRandomDirection(ball) == -1) {
             ball.dx = -dxLim;
         } else {
@@ -460,5 +531,7 @@ function writeRecord() {
     alert(a);
  
 }
+
+
 
 

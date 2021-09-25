@@ -12,6 +12,7 @@
         
        
 
+        <!--
         <form>
             <input type = "button" value = "Drop 1" onclick = "createAllBalls(1);" /> 
             <input type = "button" value = "Drop 3" onclick = "createAllBalls(3);" /> 
@@ -21,14 +22,20 @@
             <input type = "button" value = "Write" onclick = "writeRecord();" />  
                     
         </form> 
+    -->
+
 
     
         <script src="https://pixijs.download/release/pixi.js"></script>ipt>
+        <script src="particle-emitter.js"></script>
+        <script src="particles.js"></script>>
         <script src="ballRecords.js"></script>>
         <script src="constants.js"></script>>
         <script src="globals.js"></script>>
         <script src="functions.js"></script>>
         <script src="main.js"></script>>
+
+        
           
         <form>
             <!--
@@ -50,21 +57,20 @@
         </form>
         <form>
             <label for="gravity">Gravity:</label>
-            <input type="number" id="gravity" value = 0.19 name="gravity">  <br>      
+            <input type="number" id="gravity" value = 0.03 name="gravity">  <br>      
         </form>
         <form>
             <label for="x_dampener">X Damp:</label>
-            <input type="number" id="x_dampener" value = 0.6 name="x_dampener">  <br>       
+            <input type="number" id="x_dampener" value = 0.4 name="x_dampener">  <br>       
         </form>
         <form>
             <label for="y_dampener">Y Damp:</label>
-            <input type="number" id="y_dampener" value = 0.5 name="y_dampener">  <br>       
+            <input type="number" id="y_dampener" value = 0.4 name="y_dampener">  <br>       
         </form>
         <form>
             <label for="dxLim">Dx Min Limit:</label>
-            <input type="number" id="dxLim" value = 0.1 name="dxLim">  <br>       
+            <input type="number" id="dxLim" value = 0.01 name="dxLim">  <br>       
         </form>
-		
   
         
     </body>
