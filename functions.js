@@ -177,7 +177,7 @@ function createPegBoard() {
     addPeg(pegCount, x,y);
 
     // rows 2+
-    let startX = (xsize / 2) - (step / 2);
+    let startX = (xsize / 2) - 6 - (step / 2);
         
     for(let i = 2; i <=6; ++i) {
         x = startX;
