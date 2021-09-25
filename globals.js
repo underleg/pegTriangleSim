@@ -16,3 +16,5 @@ let record = [];
 let prizeSteam = false;
 
 let slowmoLine = 0;
+
+let tint = null;

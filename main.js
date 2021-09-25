@@ -14,6 +14,15 @@ function loadBackground() {
 }
 
 
+function createTint() {
+    let name = "tint.png";
+
+    tint = PIXI.Sprite.from(name);
+    app.stage.addChild(tint);
+    tint.visible = false;
+}
+
+
 loadBackground();
 
 
@@ -21,9 +30,11 @@ loadBackground();
 createPegBoard();
 createPrizeCounters();
 
+createTint();
 
-app.stage.scale.x = 0.8;
-app.stage.scale.y = 0.8;
+
+app.stage.scale.x = 0.9;
+app.stage.scale.y = 0.9;
 
 
 createAllBalls(1);
@@ -40,7 +51,9 @@ app.ticker.add((delta) => {
     delta = 1.6;
 
     let iterations = 2;
-    if(slowmo) {
+
+    if (slowmo) {
+        tint.visible = true;
         iterations = 1;
     }
 
@@ -100,7 +113,12 @@ app.ticker.add((delta) => {
                     // bounce off pegs
                     for(let j = 0; j < pegs.length; ++j)
                     {
-                        if( isColliding(pegs[j].x, pegs[j].y, balls[i].x, balls[i].y)) {
+                        if (isColliding(pegs[j].x, pegs[j].y, balls[i].x, balls[i].y)) {
+
+                            if (slowmo == false) {
+                                tint.visible = false;
+                            }
+
                             revertBallMove(balls[i], delta);
                             incrementCounts(balls[i], pegs[j]);
                             bounceAway(balls[i], pegs[j], delta);

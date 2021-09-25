@@ -58,8 +58,6 @@ function createBall(recordIdx = -1) {
         recorded = true;
     }
 
-    
-
     let name = "ball.png";
 
     if(recorded) {
