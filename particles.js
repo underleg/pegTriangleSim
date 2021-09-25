@@ -25,10 +25,10 @@ function createBallEmitter(stage) {
                 "min": 0.1,
                 "max": 0.2
             },
-            "blendMode": "normal", // add, normal, multiply, screen
-            "frequency": 0.01,
+            "blendMode": "multiply", // add, normal, multiply, screen
+            "frequency": 0.005,
             "emitterLifetime": 0,
-            "maxParticles": 20,
+            "maxParticles": 30,
             "addAtBack": true,
             "pos": {
                 "x": 0,
@@ -55,8 +55,8 @@ function createBallEmitter(stage) {
                 {
                     "type": "moveSpeedStatic",
                     "config": {
-                        "min": 5,
-                        "max": 10
+                        "min": 170,
+                        "max": 170
                     }
                 },
                 {
@@ -68,7 +68,10 @@ function createBallEmitter(stage) {
                                     "time": 0,
                                     "value": 0.5
                                 },
-                                
+                                {
+                                    "time": 0.5,
+                                    "value": 0.1
+                                },
                                 {
                                     "time": 1,
                                     "value": 0.0
@@ -85,8 +88,8 @@ function createBallEmitter(stage) {
                             "list": [
                                 {
                                     "time": 0,
-                                    "value": "000000" // "fff191"
-                                },{
+                                    "value": "FFFF00" // "fff191"
+                                }, {
                                     "time": 0.1,
                                     "value": "ff0000" // "fff191"
                                 },
@@ -95,8 +98,12 @@ function createBallEmitter(stage) {
                                     "value": "ff622c"
                                 },
                                 {
-                                    "time": 1,
-                                    "value": "ff622c"
+                                    "time": 0.8,
+                                    "value": "000000"
+                                },
+                                {
+                                    "time": 1.0,
+                                    "value": "000000"
                                 }
                             ]
                         }
@@ -108,8 +115,8 @@ function createBallEmitter(stage) {
                         "accel": 0,
                         "minSpeed": 10,
                         "maxSpeed": 50,
-                        "minStart": 0,
-                        "maxStart": 360
+                        "minStart": 250,
+                        "maxStart": 290
                     }
                 },
                 {
@@ -172,7 +179,7 @@ function createPrizeEmitter1(stage) {
             "blendMode": "multiply", // add, normal, multiply, screen
             "frequency": 0.0005,
             "emitterLifetime": 0.1,
-            "maxParticles": 100,
+            "maxParticles": 70,
             "addAtBack": true,
             "pos": {
                 "x": 0,
@@ -199,8 +206,8 @@ function createPrizeEmitter1(stage) {
                 {
                     "type": "moveSpeedStatic",
                     "config": {
-                        "min": 2000,
-                        "max": 2000
+                        "min": 2700,
+                        "max": 2700
                     }
                 },
                 {
@@ -245,8 +252,8 @@ function createPrizeEmitter1(stage) {
                         "accel": 0,
                         "minSpeed": 0,
                         "maxSpeed": 1,
-                        "minStart": 250,
-                        "maxStart": 290
+                        "minStart": 260,
+                        "maxStart": 280
                     }
                 },
                 {

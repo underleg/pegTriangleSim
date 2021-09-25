@@ -69,7 +69,7 @@ function createBall(recordIdx = -1) {
     if(recorded) {
         x = ballRecords[recordIdx].startX;
     } else {
-        x += (xsize / 2) + randomStartXVariation();
+        x += (xsize / 2) + randomStartXVariation() - pegXOffset;
     }
 
     let emitter = createBallEmitter(app.stage);
@@ -77,8 +77,6 @@ function createBall(recordIdx = -1) {
     emitter.resetPositionTracking();
     emitter.updateOwnerPos(x,y);
 
-
-    
     ballcount++;
     let s = PIXI.Sprite.from(name);
     app.stage.addChild(s);
@@ -88,7 +86,7 @@ function createBall(recordIdx = -1) {
     let ballText = new PIXI.Text('0', fontStyle);
     ballText.x = radius/2;
     ballText.y = radius/2;
-    s.addChild(ballText);
+    //s.addChild(ballText);
 
     s.x = x - radius;
     s.y = y - radius;
@@ -168,7 +166,7 @@ function addPeg(id, x,y) {
 // create whole peg board
 function createPegBoard() {
     
-    let x = xsize / 2 - 6;
+    let x = xsize / 2 - pegXOffset;
     let y = 120 + 14;
     let step = 67;
     let pegCount = 1;
@@ -177,7 +175,7 @@ function createPegBoard() {
     addPeg(pegCount, x,y);
 
     // rows 2+
-    let startX = (xsize / 2) - 6 - (step / 2);
+    let startX = (xsize / 2) - pegXOffset - (step / 2);
         
     for(let i = 2; i <=6; ++i) {
         x = startX;

@@ -18,3 +18,5 @@ let prizeSteam = false;
 let slowmoLine = 0;
 
 let tint = null;
+
+let pegXOffset = 6;

@@ -33,8 +33,8 @@ createPrizeCounters();
 createTint();
 
 
-app.stage.scale.x = 0.9;
-app.stage.scale.y = 0.9;
+app.stage.scale.x = 0.8;
+app.stage.scale.y = 0.8;
 
 
 createAllBalls(1);
