@@ -70,7 +70,7 @@ app.ticker.add((delta) => {
             
             let destroyBalls = [];
 
-            if(prizeStream && elapsed > 30.0) {
+            if(prizeStream && elapsed > 120.0) {
                 let idx = Math.floor(Math.random()*ballRecords.length);
                 forcePrize(ballRecords[idx].prize - 1);
                 elapsed = 0;
