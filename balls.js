@@ -104,6 +104,7 @@ function createBall(recordIdx = -1) {
     
 
     let res = { recordIdx: recordIdx,
+                disqualified: false,
                 id: ballcount, 
                 x:x, y:y, 
                 startX:x,

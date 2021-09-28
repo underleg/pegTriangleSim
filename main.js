@@ -114,6 +114,7 @@ app.ticker.add((delta) => {
                     // bounce off walls
                     if(balls[i].x < wallXSize || balls[i].x > xsize - wallXSize) {
                         balls[i].dx *= -1;
+                        balls[i].disqualified = true;
                     }
 
                     // bounce off pegs

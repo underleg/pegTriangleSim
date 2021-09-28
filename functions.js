@@ -241,8 +241,20 @@ function countPrize(ball) {
         frozen = true;
     }
 
+    // disqualify if ball bounces on less then 3 pegs
+    if (ball.bounceRecord.length < 3) {
+        ball.disqualified = true;
+    }
+
+    // disqualify if ball lands too far from centre of cup
+    let cupDist = Math.abs(ball.x - prizeX);
+    if (cupDist > 25) {
+        ball.disqualified = true;
+    }
+
+    
     // record good ball drops (plenty of peg hits, not too many stalls)
-    if(record.length < 1000 && ball.bounceRecord.length >= 3 && ball.repeatBounceCount <= 6) 
+    if(record.length < 1000 && ball.disqualified == false) 
     {     
        //console.log("ball.repeatBounceCount = " +ball.repeatBounceCount)
         record[record.length] = 
@@ -298,6 +310,11 @@ function incrementCounts(ball, peg) {
        
     } else {
         ball.repeatBounceCount++;
+
+        // disqualify if bal bounes on same peg more than 5 times
+        if (ball.repeatBounceCount > 5) {
+            ball.disqualified = true;
+        }
     }
 }
 
@@ -330,7 +347,7 @@ function writeRecord() {
     }
 
     let a = "\n\n//Counts: ";
-    for(i = 0; i < 7; ++i) {
+    for(i = 0; i < 6; ++i) {
         a += "(" + i + ")" + counts[i] + " ";
     }
     a += " = " + sum;
@@ -374,6 +391,10 @@ function writeRecord() {
 
     alert(a);
  
+}
+
+function killParticles() {
+    doParticles = false;
 }
 
 
