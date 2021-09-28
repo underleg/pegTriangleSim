@@ -13,14 +13,16 @@ let randomNumbersIdx = 0;
 
 let record = [];
 
-let prizeSteam = false;
+let prizeStream = false;
 
 let slowmoLine = 0;
 
 let tint = null;
 let tintFadeStep = 0.02;
 
-
 let pegXOffset = 6;
 
 let rndPeg = 7;
+
+let doParticles = true;
+let numSpawnBalls = 0;

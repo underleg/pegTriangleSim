@@ -44,7 +44,7 @@ function forcePrize(id) {
 
 // turn on/off continueous stream prizes with recorded paths
 function forcePrizeStream() {
-    prizeSteam = !prizeSteam;
+    prizeStream = !prizeStream;
 }
 
 
@@ -72,11 +72,13 @@ function createBall(recordIdx = -1) {
         x += (xsize / 2) + randomStartXVariation() - (pegXOffset);
     }
 
-    let emitter = createBallEmitter(app.stage);
-    emitter.emit = true;
-    emitter.resetPositionTracking();
-    emitter.updateOwnerPos(x,y);
-
+    let emitter = null;
+    if (doParticles) {
+        emitter  = createBallEmitter(app.stage);
+        emitter.emit = true;
+        emitter.resetPositionTracking();
+        emitter.updateOwnerPos(x, y);
+    }
     ballcount++;
     let s = PIXI.Sprite.from(name);
     app.stage.addChild(s);
@@ -125,6 +127,14 @@ function createBall(recordIdx = -1) {
     return res;
 }
 
+function destroyPrizeParticles(ball) {
+    if (ball.emitter) {
+        ball.emitter.cleanup();
+        ball.emitter.destroy();
+    }
+}
+
+
 
 // ball has hit the bottom of the triangle - reset it to the top
 function recycleBall(ball) {
@@ -145,6 +155,7 @@ function recycleBall(ball) {
     updatePegs();
 
 }
+
 
 // singlepeg contructor
 function addPeg(id, x,y) {
@@ -183,8 +194,8 @@ function addPeg(id, x,y) {
 function createPegBoard() {
     
     let x = xsize / 2 - pegXOffset;
-    let y = 120 + 14;
-    let step = 67;
+    let y = 120 + 14 + 10;
+    let step = 80; //67;
     let pegCount = 1;
 
     // row 1
@@ -193,7 +204,7 @@ function createPegBoard() {
     // rows 2+
     let startX = (xsize / 2) - pegXOffset - (step / 2);
         
-    for(let i = 2; i <=6; ++i) {
+    for(let i = 2; i <=5; ++i) {
         x = startX;
         y += step*cos30;
         for(let j = 0; j < i; ++j) {
@@ -204,8 +215,8 @@ function createPegBoard() {
         startX -= step/2;
     }
 
-    pegYLine = y + 60;
-    slowmoLine = pegYLine - 100;
+    pegYLine = y + 70;
+    slowmoLine = pegYLine - 110;
 
     updatePegs();
 
@@ -258,9 +269,9 @@ function createPrizeCounters() {
         fill: ['#ffffff'], 
     });
 
-    let x = (xsize / 2) - (60 * 3);
+    let x = (xsize / 2) - (60 * 2.5);
 
-    for(let i = 0; i < 7; ++i) {
+    for(let i = 0; i < 6; ++i) {
 
         let cntrText = new PIXI.Text(0, style);
         cntrText.x = x;
@@ -326,29 +337,28 @@ function updateAllPrizeEmitters(delta) {
 // count which bucket the ball has fallen into based on x coord
 let numPrizesAwarded = 0;
 function countPrize(ball) {
-    togglePrizeEmitters(true);
+    
+    
     let idx = 0;
-    if(ball.x < pegs[15].x) {
+
+    if(ball.x < pegs[10].x) {
         idx = 0;
-        prizeX = 50;
-    } else if(ball.x < pegs[16].x) {
+        prizeX = 54;
+    } else if(ball.x < pegs[11].x) {
         idx = 1;
-        prizeX =131; 
-    }else if(ball.x < pegs[17].x) {
+        prizeX =148; 
+    }else if(ball.x < pegs[12].x) {
         idx = 2;
-        prizeX = 205;
-    }else if(ball.x < pegs[18].x) {
+        prizeX = 230;
+    }else if(ball.x < pegs[13].x) {
         idx = 3;
-        prizeX = 270;
-    }else if(ball.x < pegs[19].x) {
+        prizeX = 309;
+    }else if(ball.x < pegs[14].x) {
         idx = 4;
-        prizeX = 336;
-    }else if(ball.x < pegs[20].x) {
-        prizeX = 410;
+        prizeX = 389;
+    } else {
+        prizeX = 486;
         idx = 5;
-    }else {
-        prizeX = 490;
-        idx = 6;
     }
 
     prizeCounts[idx].count++;
@@ -488,7 +498,6 @@ function bounceAway(ball, peg, timeDelta) {
 }
 
 function writeRecord() {
-
 
     // record settings in comments
     let s = "\n////////////////////////////////////////////////////////////";

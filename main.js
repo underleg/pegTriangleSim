@@ -25,8 +25,6 @@ function createTint() {
 
 loadBackground();
 
-
-
 createPegBoard();
 createPrizeCounters();
 
@@ -37,11 +35,12 @@ app.stage.scale.x = 0.8;
 app.stage.scale.y = 0.8;
 
 
-createAllBalls(1);
+createAllBalls(numSpawnBalls);
 let slowmo = false;
 
-createAllPrizeEmitters();
-
+if (doParticles) {
+    createAllPrizeEmitters();
+}
 
 
 // Add a ticker callback to move the sprite back and forth
@@ -71,10 +70,10 @@ app.ticker.add((delta) => {
             
             let destroyBalls = [];
 
-            if(prizeSteam && elapsed > 30.0) {
+            if(prizeStream && elapsed > 30.0) {
                 let idx = Math.floor(Math.random()*ballRecords.length);
                 forcePrize(ballRecords[idx].prize - 1);
-                elapsed -= 30.0;
+                elapsed = 0;
             }
 
             updateAllPrizeEmitters(delta);
@@ -103,12 +102,13 @@ app.ticker.add((delta) => {
                 // ball is at the end - record prize and recycle / destroy
                 if(balls[i].y > pegYLine)
                 {
-                    countPrize(balls[i]);
+                    togglePrizeEmitters(true);
+                    countPrize(balls[i], balls.length == 1);
+                    slowmo = false;
                     if(balls[i].recordIdx >= 0) {
                         destroyBalls[destroyBalls.length] = i;
                     } else {
-                        recycleBall(balls[i]);
-                        slowmo = false;
+                        recycleBall(balls[i]);                   
                     }
                 } else {
                     // bounce off walls
@@ -134,8 +134,10 @@ app.ticker.add((delta) => {
             }
 
             while(destroyBalls.length > 0) {
-                assert(destroyBalls[0] >= 0 && destroyBalls[0] < balls.length, "out of bounds");
-                assert(balls[destroyBalls[0]].hasOwnProperty('sprite'), "sprite doesn't exist");
+                console.assert(destroyBalls[0] >= 0 && destroyBalls[0] < balls.length, "out of bounds");
+                console.assert(balls[destroyBalls[0]].hasOwnProperty('sprite'), "sprite doesn't exist");
+
+                destroyPrizeParticles(balls[destroyBalls[0]]);
                 
                 app.stage.removeChild(balls[destroyBalls[0]].sprite);  
                 balls.splice(destroyBalls[0], 1);     
