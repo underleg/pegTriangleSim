@@ -150,9 +150,7 @@ function recycleBall(ball) {
     ball.bounceRecord = [];
     ball.repeatBounceCount = 0;
 
-    rndPeg = Math.floor(Math.random() * 21);
-
-    updatePegs();
+    resetPegs();
 
 }
 
@@ -218,39 +216,43 @@ function createPegBoard() {
     pegYLine = y + 70;
     slowmoLine = pegYLine - 110;
 
-    updatePegs();
+    resetPegs();
 
 }
 
-function updatePegs() {
+function resetPegs() {
     for (let i = 0; i < pegs.length; ++i) {
-        if (i == rndPeg) {
-            pegs[i].sprite.visible = false;
-            pegs[i].sprite2.visible = true;
-        } else {
-            pegs[i].sprite2.visible = false;
-            pegs[i].sprite.visible = true;
-        }
+        pegs[i].sprite2.visible = false;
+        pegs[i].sprite.visible = true;
     }
 }
 
 
 // update peg string to show where recorded ball will hit
 function updatePegsToShowRecordedPath(idx) {
-    
+
+    resetPegs();
+
     if(idx >= 0 && idx < ballRecords.length) {
 
         // look at each peg
-        for(let i = 0; i < pegs.length; ++i) {
+        for (let i = 0; i < pegs.length; ++i) {
+            let lit = false;
             let s = "-";
             // if peg hit by the recorded ball?
             for(let j = 0; j < ballRecords[idx].bounceRecord.length; ++j) {
                 if(ballRecords[idx].bounceRecord[j] == i+1) {
                     s = "X";
+                    lit = true;
                     break;
                 }
             }
             pegs[i].text.text = s;
+
+            if (lit) {
+                pegs[i].sprite2.visible = true;
+                pegs[i].sprite.visible = false;
+            }
         }
     }
 }
@@ -325,7 +327,7 @@ function updateAllPrizeEmitters(delta) {
         for(let j = 0; j < e.length; ++j) {
         
             e[j].resetPositionTracking();
-            e[j].updateOwnerPos(prizeX,460); 
+            e[j].updateOwnerPos(prizeX,475); 
             
             e[j].update(delta * 0.001);
         }
@@ -337,27 +339,26 @@ function updateAllPrizeEmitters(delta) {
 // count which bucket the ball has fallen into based on x coord
 let numPrizesAwarded = 0;
 function countPrize(ball) {
-    
-    
+
     let idx = 0;
 
     if(ball.x < pegs[10].x) {
         idx = 0;
-        prizeX = 54;
+        prizeX = cupXCoords[0];
     } else if(ball.x < pegs[11].x) {
         idx = 1;
-        prizeX =148; 
+        prizeX = cupXCoords[1];
     }else if(ball.x < pegs[12].x) {
         idx = 2;
-        prizeX = 230;
+        prizeX = cupXCoords[2];
     }else if(ball.x < pegs[13].x) {
         idx = 3;
-        prizeX = 309;
+        prizeX = cupXCoords[3];
     }else if(ball.x < pegs[14].x) {
         idx = 4;
-        prizeX = 389;
+        prizeX = cupXCoords[4];
     } else {
-        prizeX = 486;
+        prizeX = cupXCoords[5];
         idx = 5;
     }
 

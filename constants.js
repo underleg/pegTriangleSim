@@ -2,6 +2,8 @@
 const xsize = 541;
 const ysize = 1001;
 
+const cupXCoords = [54, 148, 230, 309, 389, 486];
+
 const frozenLimit = 100;
 
 const radius = 16
