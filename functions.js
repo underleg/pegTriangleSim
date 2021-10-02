@@ -29,7 +29,7 @@ function addPeg(id, x,y) {
     sprite.scale.y = pegScale;
 
     sprite.x = x - radius;
-    sprite.y = y - radius;
+    sprite.y = y - radius + 4;
 
     // Create the alternate sprite and add it to the stage
     name = "peg_pink.png";
@@ -56,8 +56,8 @@ function addPeg(id, x,y) {
 function createPegBoard() {
     
     let x = xsize / 2 - pegXOffset;
-    let y = 120 + 14 + 10;
-    let step = 80; //67;
+    let y = 70 + 14 + 10;
+    let step = 70; //67;
     let pegCount = 1;
 
     // row 1
@@ -77,7 +77,7 @@ function createPegBoard() {
         startX -= step/2;
     }
 
-    pegYLine = y + 75;
+    pegYLine = y + 75 - 25;
     slowmoLine = pegYLine - 120;
 
     resetPegs();
@@ -132,7 +132,7 @@ function createPrizeCounters() {
         fontSize: 16,
         fontStyle: 'italic',
         fontWeight: 'bold',
-        fill: ['#ffffff'], 
+        fill: ['#000000'], 
     });
 
     let x = (xsize / 2) - (60 * 2.5);
@@ -141,7 +141,7 @@ function createPrizeCounters() {
 
         let cntrText = new PIXI.Text(0, style);
         cntrText.x = x;
-        cntrText.y = 100 * 9 + 50;
+        cntrText.y = 100 * 10;
         app.stage.addChild(cntrText);
 
         prizeCounts[prizeCounts.length] = { id: (i+1), text: cntrText, count: 0 };

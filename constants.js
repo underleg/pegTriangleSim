@@ -6,8 +6,8 @@ const cupXCoords = [54, 148, 230, 309, 389, 486];
 
 const frozenLimit = 100;
 
-const radius = 16
-const ball_radius = 9;
+const radius = 16;
+const ball_radius = 10;
 const collision_radius = 20;
 const ballScale = (radius + 2.0)/ 16.0;
 const pegScale = (radius + 0.0)/ 20.0;

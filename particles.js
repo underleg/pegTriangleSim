@@ -88,18 +88,11 @@ function createBallEmitter(stage) {
                             "list": [
                                 {
                                     "time": 0,
-                                    "value": "FFFF00" // "fff191"
-                                }, {
-                                    "time": 0.1,
-                                    "value": "ff0000" // "fff191"
+                                    "value": "FFFFFF" // "fff191"
                                 },
                                 {
                                     "time": 0.6,
-                                    "value": "ff622c"
-                                },
-                                {
-                                    "time": 0.8,
-                                    "value": "000000"
+                                    "value": "83cdff"
                                 },
                                 {
                                     "time": 1.0,

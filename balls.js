@@ -84,8 +84,8 @@ function createBall(recordIdx = -1) {
     ballText.y = radius/2;
     //s.addChild(ballText);
 
-    s.x = x - radius;
-    s.y = y - radius;
+    s.x = x - 30;
+    s.y = y - 30;
     let rndms = [];
     if(recorded) {
         rndms = ballRecords[recordIdx].randomDirections;    
