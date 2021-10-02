@@ -1,9 +1,9 @@
 
-
-
-
 // Create the sprite and add it to the stage
 function createAllBalls(numBalls) {
+    if (numBalls > 50) {
+        doParticles = false;
+    }
     let idx = balls.length;
     for(let i = 0; i < numBalls; ++i) {
         let ball =  createBall();
@@ -12,13 +12,21 @@ function createAllBalls(numBalls) {
     }
 }
 
-// removes balls
+// removes all balls
 function clearBalls() {
-    for(let i = 0; i < balls.length; ++i) {
-        app.stage.removeChild(balls[i].sprite);
+
+    while (balls.length > 0) {
+        clearBall(0);   
     }
     balls = [];
-    frozen = false;
+}
+
+// removes ball from 'balls' collection
+function clearBall(idx) {
+    console.assert(idx >= 0 && idx < balls.length);
+    // todo - remove particle
+    app.stage.removeChild(balls[idx].sprite);
+    balls.splice(idx, 1);
 }
 
 // creates ball to follow recorded path. Also updates pegs to show ball hits
@@ -54,18 +62,16 @@ function createBall(recordIdx = -1) {
 
     let name = "ball.png";
 
-    if(recorded) {
-        name = "ball.png";
-    }
-   
+    // set ball screen coords
     let y = startY;
     let x = 0;
     if(recorded) {
         x = ballRecords[recordIdx].startX;
     } else {
-        x += (xsize / 2) + randomStartXVariation() - (pegXOffset);
+        x += (xsize / 2) + randomBallStartXCoord();
     }
 
+    // create ball particle emitter
     let emitter = null;
     if (doParticles) {
         emitter  = createBallEmitter(app.stage);
@@ -73,19 +79,17 @@ function createBall(recordIdx = -1) {
         emitter.resetPositionTracking();
         emitter.updateOwnerPos(x, y);
     }
+    
+
     ballcount++;
     let s = PIXI.Sprite.from(name);
     app.stage.addChild(s);
-    s.scale.x = ballScale;
-    s.scale.y = ballScale;
 
-    let ballText = new PIXI.Text('0', fontStyle);
-    ballText.x = radius/2;
-    ballText.y = radius/2;
-    //s.addChild(ballText);
+    // set ball sprite offset
+    s.x = x - ball_sprite_radius;
+    s.y = y - ball_sprite_radius;
 
-    s.x = x - 30;
-    s.y = y - 30;
+    // create a list of random bounce direction -1 (left) or 1 (right)
     let rndms = [];
     if(recorded) {
         rndms = ballRecords[recordIdx].randomDirections;    
@@ -100,9 +104,7 @@ function createBall(recordIdx = -1) {
         }
     }
 
-
-    
-
+    // Ball structure
     let res = { recordIdx: recordIdx,
                 disqualified: false,
                 id: ballcount, 
@@ -113,7 +115,6 @@ function createBall(recordIdx = -1) {
                 name: name, 
                 randomDirections: rndms, 
                 randomIdx: 0,
-                text: ballText,
                 count: 0,
                 lastPegHit: -1,
                 bounceRecord: [],
@@ -122,17 +123,14 @@ function createBall(recordIdx = -1) {
     return res;
 }
 
-
-
 // ball has hit the bottom of the triangle - reset it to the top
 function recycleBall(ball) {
     ball.y = startY;
-    ball.x = (xsize / 2) + randomStartXVariation() - (pegXOffset);
+    ball.x = (xsize / 2) + randomBallStartXCoord();
     ball.startX = ball.x;
     ball.dx = 0;
     ball.dy = 0;     
     ball.count = 0;
-    ball.text.text = "0";
     ball.randomIdx = 0;
     ball.lastPegHit = -1;
     ball.bounceRecord = [];
@@ -146,19 +144,20 @@ function recycleBall(ball) {
 function moveBall(ball, timeDelta) {
     ball.x += ball.dx * timeDelta;
     ball.y += ball.dy * timeDelta;
-    ball.sprite.x = ball.x - ball_radius;
-    ball.sprite.y = ball.y - ball_radius;
+    ball.sprite.x = ball.x - ball_sprite_radius;
+    ball.sprite.y = ball.y - ball_sprite_radius;
 }
 
-
+// revert last ball move
 function revertBallMove(ball, timeDelta) {
     ball.x -= ball.dx * timeDelta;
     ball.y -= ball.dy * timeDelta;
-    ball.sprite.x = ball.x - ball_radius;
-    ball.sprite.y = ball.y - ball_radius;
+    ball.sprite.x = ball.x - ball_sprite_radius;
+    ball.sprite.y = ball.y - ball_sprite_radius;
 }
 
 
+// bounce ball away from peg
 function bounceAway(ball, peg, timeDelta) {
     // get unit vector from peg to ball
     let pb = { x: (peg.x - ball.x), y: (peg.y - ball.y) }
@@ -194,6 +193,51 @@ function bounceAway(ball, peg, timeDelta) {
         }
     }
 }
+
+
+// returns a number -2 and 2 representing start position variation in x coord
+function randomBallStartXCoord() {
+
+    let res = 500 + Math.floor(Math.random() * 501); // 500 - 1000 (inclusive)
+
+    if (Math.random() < 0.5) {
+        res *= -1;
+    }
+
+    // either -1000 to -500 or 500 to 1000
+
+    res *= 2;
+
+    res /= 1000;
+
+    // either -2.0 to -1.0 or 1.0 to 2.0
+
+    return res;
+}
+
+
+function getRandomDirection(ball) {
+    if (ball.randomDirections.length > ball.randomIdx) {
+        let res = ball.randomDirections[ball.randomIdx];
+        ball.randomIdx = (ball.randomIdx % randomsDirectionsPerBall);
+        return res;
+    }
+    else return -1;
+}
+
+function areBallAndPegColliding(peg, ball) {
+    let x1 = peg.x;
+    let x2 = ball.x;
+    let y1 = peg.y;
+    let y2 = ball.y;
+
+    let d2 = (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
+    if (d2 < collisionDiameterSquared) {
+        return true;
+    }
+    return false;
+}
+
 
 
 

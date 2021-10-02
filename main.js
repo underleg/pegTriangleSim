@@ -5,7 +5,6 @@ let app = new PIXI.Application({ backgroundColor: 0xffffff, width: xsize, height
 document.body.appendChild(app.view);
 
 
-
 function loadBackground() {
     let name = "bg.png";
 
@@ -14,137 +13,88 @@ function loadBackground() {
 }
 
 
-function createTint() {
-    let name = "tint.png";
-
-    tint = PIXI.Sprite.from(name);
-    app.stage.addChild(tint);
-    tint.visible = false;
-}
-
-
 loadBackground();
 
 createPegBoard();
 createPrizeCounters();
 
-createTint();
-
-
-app.stage.scale.x = 0.8;
-app.stage.scale.y = 0.8;
-
-
 createAllBalls(numSpawnBalls);
-let slowmo = false;
 
 if (doParticles) {
     createAllPrizeEmitters();
 }
 
-
 // Add a ticker callback to move the sprite back and forth
 let elapsed = 0.0;
 app.ticker.add((delta) => {
 
-    delta = 1.6;
+    delta = 1.6; // tixed timestep (60fps)
 
-    let iterations = 2;
+    elapsed += delta;
 
-    if (slowmo) {
-        tint.visible = true;
-        iterations = 1;
-        if (tint.alpha < 1) {
-            tint.alpha += tintFadeStep;
-        }      
-    }
-    else {
-        tint.alpha = 0;
+    let destroyBalls = [];
+
+    // if prizeStream is on, drop a recorded ball at intervals 
+    if(prizeStream && elapsed > 120.0) {
+        let idx = Math.floor(Math.random()*ballRecords.length);
+        forcePrize(ballRecords[idx].prize - 1);
+        elapsed = 0;
     }
 
-    for(let it = 0; it < iterations; ++ it) {
-        
-        elapsed += delta;
+    // updte prize particle emitters
+    updateAllPrizeEmitters(delta);
 
-        if(frozen == false) {
+    let gravity = document.getElementById("gravity").value;
+
+
+    // ball update loop
+    for(i = 0; i < balls.length; ++i) {
+
+        balls[i].dy += gravity * delta;
+        moveBall(balls[i], delta);
+
+        if(balls[i].emitter) {
+            balls[i].emitter.updateOwnerPos(balls[i].x,balls[i].y);
+            balls[i].emitter.update(delta * 0.001);
+        }              
             
-            let destroyBalls = [];
-
-            if(prizeStream && elapsed > 120.0) {
-                let idx = Math.floor(Math.random()*ballRecords.length);
-                forcePrize(ballRecords[idx].prize - 1);
-                elapsed = 0;
+        // ball is at the end - record prize and recycle / destroy
+        if (balls[i].y > pegYLine) {
+            togglePrizeEmitters(true);
+            countPrize(balls[i], balls.length == 1);
+                
+            if(balls[i].recordIdx >= 0) {
+                destroyBalls[destroyBalls.length] = i;
+            } else {
+                recycleBall(balls[i]);                   
+            }
+        } else {
+            // bounce off walls
+            if(balls[i].x < wallXSize || balls[i].x > xsize - wallXSize) {
+                balls[i].dx *= -1;
+                balls[i].disqualified = true; // disqualified from being recorded
             }
 
-            updateAllPrizeEmitters(delta);
-
-            for(i = 0; i < balls.length; ++i) {
-
-                if(balls[i].y < 0.0)
-                {
-                    balls[i].dy = 1;
-                }
-
-                let gravity = document.getElementById("gravity").value;
-                balls[i].dy += gravity * delta;
-                moveBall(balls[i], delta);
-
-                if(balls[i].emitter) {
-                    
-                    balls[i].emitter.updateOwnerPos(balls[i].x,balls[i].y);
-                    balls[i].emitter.update(delta * 0.001);
-                }
-                
-                if (balls.length == 1 && balls[i].y > slowmoLine) {
-                    slowmo = true;
-                }
-                
-                // ball is at the end - record prize and recycle / destroy
-                if(balls[i].y > pegYLine)
-                {
-                    togglePrizeEmitters(true);
-                    countPrize(balls[i], balls.length == 1);
-                    slowmo = false;
-                    if(balls[i].recordIdx >= 0) {
-                        destroyBalls[destroyBalls.length] = i;
-                    } else {
-                        recycleBall(balls[i]);                   
-                    }
-                } else {
-                    // bounce off walls
-                    if(balls[i].x < wallXSize || balls[i].x > xsize - wallXSize) {
-                        balls[i].dx *= -1;
-                        balls[i].disqualified = true;
-                    }
-
-                    // bounce off pegs
-                    for(let j = 0; j < pegs.length; ++j)
-                    {
-                        if (isColliding(pegs[j].x, pegs[j].y, balls[i].x, balls[i].y)) {
-
-                            if (slowmo == false) {
-                                tint.visible = false;
-                            }
-
-                            revertBallMove(balls[i], delta);
-                            incrementCounts(balls[i], pegs[j]);
-                            bounceAway(balls[i], pegs[j], delta);
-                        } 
-                    }
-                }
+            // bounce off pegs
+            for(let j = 0; j < pegs.length; ++j) {
+                if (areBallAndPegColliding(pegs[j], balls[i])) {
+                        
+                    revertBallMove(balls[i], delta);
+                    incrementCounts(balls[i], pegs[j]);
+                    bounceAway(balls[i], pegs[j], delta);
+                } 
             }
+        }
+            
+        while(destroyBalls.length > 0) {
+            console.assert(destroyBalls[0] >= 0 && destroyBalls[0] < balls.length, "out of bounds");
+            console.assert(balls[destroyBalls[0]].hasOwnProperty('sprite'), "sprite doesn't exist");
 
-            while(destroyBalls.length > 0) {
-                console.assert(destroyBalls[0] >= 0 && destroyBalls[0] < balls.length, "out of bounds");
-                console.assert(balls[destroyBalls[0]].hasOwnProperty('sprite'), "sprite doesn't exist");
-
-                destroyPrizeParticles(balls[destroyBalls[0]]);
+            destroyPrizeParticles(balls[destroyBalls[0]]);
                 
-                app.stage.removeChild(balls[destroyBalls[0]].sprite);  
-                balls.splice(destroyBalls[0], 1);     
-                destroyBalls.splice(0,1);
-
-            }
+            app.stage.removeChild(balls[destroyBalls[0]].sprite);  
+            balls.splice(destroyBalls[0], 1);     
+            destroyBalls.splice(0,1);
         }
     }
 });

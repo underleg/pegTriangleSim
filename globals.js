@@ -1,8 +1,7 @@
 
-let frozen = false;
 
-let balls = [];
-let pegs = [];
+let balls = []; // collection of all balls dropping through peg triangle
+let pegs = []; // collection of all pegs in triangle
 let prizeCounts = [];
 let pegYLine = 0
 
@@ -15,12 +14,6 @@ let record = [];
 
 let prizeStream = false;
 
-let slowmoLine = 0;
 
-let tint = null;
-let tintFadeStep = 0.02;
-
-let pegXOffset = 8;
-
-let doParticles = false;
-let numSpawnBalls = 1;
+let doParticles = true;
+let numSpawnBalls = 0;

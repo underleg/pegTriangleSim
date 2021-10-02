@@ -42,7 +42,7 @@ function createBallEmitter(stage) {
                             "list": [
                                 {
                                     "time": 0,
-                                    "value": 0.7
+                                    "value": 0.3
                                 },
                                 {
                                     "time": 1,
@@ -88,7 +88,7 @@ function createBallEmitter(stage) {
                             "list": [
                                 {
                                     "time": 0,
-                                    "value": "FFFFFF" // "fff191"
+                                    "value": "ffffff"
                                 },
                                 {
                                     "time": 0.6,
@@ -166,12 +166,12 @@ function createPrizeEmitter1(stage) {
         // of the emitter
         {
             "lifetime": {
-                "min": 0.2,
-                "max": 0.2
+                "min": 0.03,
+                "max": 0.05
             },
             "blendMode": "multiply", // add, normal, multiply, screen
-            "frequency": 0.0005,
-            "emitterLifetime": 0.1,
+            "frequency": 0.0001,
+            "emitterLifetime": 0.01,
             "maxParticles": 70,
             "addAtBack": true,
             "pos": {
@@ -190,7 +190,7 @@ function createPrizeEmitter1(stage) {
                                 },
                                 {
                                     "time": 1,
-                                    "value": 0.5
+                                    "value": 0.0
                                 }
                             ]
                         }
@@ -199,8 +199,8 @@ function createPrizeEmitter1(stage) {
                 {
                     "type": "moveSpeedStatic",
                     "config": {
-                        "min": 2700,
-                        "max": 2700
+                        "min": 1500,
+                        "max": 2000
                     }
                 },
                 {
@@ -229,11 +229,11 @@ function createPrizeEmitter1(stage) {
                             "list": [
                                 {
                                     "time": 0,
-                                    "value": "FFFFFF" //"0000FF"
+                                    "value": "FFFFFF" 
                                 },
                                 {
                                     "time": 1,
-                                    "value": "00FFFF"
+                                    "value": "ffffff" // "9afefe"
                                 }
                             ]
                         }
@@ -244,16 +244,16 @@ function createPrizeEmitter1(stage) {
                     "config": {
                         "accel": 0,
                         "minSpeed": 0,
-                        "maxSpeed": 1,
-                        "minStart": 260,
-                        "maxStart": 280
+                        "maxSpeed": 100,
+                        "minStart": 0,
+                        "maxStart": 360
                     }
                 },
                 {
                     "type": "textureRandom",
                     "config": {
                         "textures": [
-                            "star2.png"
+                            "point.png"
                             
                         ]
                     }
@@ -265,7 +265,144 @@ function createPrizeEmitter1(stage) {
                         "data": {
                             "x": 0,
                             "y": 0,
-                            "radius": 20,
+                            "radius": 1,
+                            "innerRadius": 0,
+                            "affectRotation": true
+                        }
+                    }
+                }
+            ]
+        }
+    );
+
+    return emitter;
+}
+
+
+function createPrizeEmitter2(stage) {
+
+    pc = new PIXI.ParticleContainer();
+    pc.setProperties({
+        scale: true,
+        position: true,
+        rotation: true,
+        uvs: true,
+        alpha: true,
+    });
+
+    stage.addChild(pc);
+
+
+    var emitter = new PIXI.particles.Emitter(
+
+        // The PIXI.Container to put the emitter in
+        // if using blend modes, it's important to put this
+        // on top of a bitmap, and not use the root stage Container
+        pc,
+        // Emitter configuration, edit this to change the look
+        // of the emitter
+        {
+            "lifetime": {
+                "min": 0.06,
+                "max": 0.09
+            },
+            "blendMode": "multiply", // add, normal, multiply, screen
+            "frequency": 0.0002,
+            "emitterLifetime": 0.02,
+            "maxParticles": 15,
+            "addAtBack": true,
+            "pos": {
+                "x": 0,
+                "y": 0
+            },
+            "behaviors": [
+                {
+                    "type": "alpha",
+                    "config": {
+                        "alpha": {
+                            "list": [
+                                {
+                                    "time": 0,
+                                    "value": 0.6
+                                },
+                                {
+                                    "time": 1,
+                                    "value": 0.0
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "moveSpeedStatic",
+                    "config": {
+                        "min": 2000,
+                        "max": 2800
+                    }
+                },
+                {
+                    "type": "scale",
+                    "config": {
+                        "scale": {
+                            "list": [
+                                {
+                                    "time": 0,
+                                    "value": 0.25
+                                },
+
+                                {
+                                    "time": 1,
+                                    "value": 0.0
+                                }
+                            ]
+                        },
+                        "minMult": 1
+                    }
+                },
+                {
+                    "type": "color",
+                    "config": {
+                        "color": {
+                            "list": [
+                                {
+                                    "time": 0,
+                                    "value": "a9fcfd"
+                                },
+                                {
+                                    "time": 1,
+                                    "value": "ffffff" // "9afefe"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "rotation",
+                    "config": {
+                        "accel": 0,
+                        "minSpeed": 0,
+                        "maxSpeed": 1,
+                        "minStart": 220,
+                        "maxStart": 320
+                    }
+                },
+                {
+                    "type": "textureRandom",
+                    "config": {
+                        "textures": [
+                            "star.png"
+
+                        ]
+                    }
+                },
+                {
+                    "type": "spawnShape",
+                    "config": {
+                        "type": "torus",
+                        "data": {
+                            "x": 0,
+                            "y": 0,
+                            "radius": 1,
                             "innerRadius": 0,
                             "affectRotation": false
                         }
@@ -280,7 +417,7 @@ function createPrizeEmitter1(stage) {
 
 
 
-function createPrizeEmitter2(stage) {
+function createPrizeEmitter2_old(stage) {
    
     pc = new PIXI.ParticleContainer();
     pc.setProperties({
