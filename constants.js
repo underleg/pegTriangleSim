@@ -5,11 +5,11 @@ const ysize = 1001;
 const cupXCoords = [87, 160, 233, 307, 379, 454];
 
 const radius = 16;
-const ball_sprite_radius = 20;
-const collision_radius = 20;
+const ball_sprite_radius = 22;
+const collision_radius = 22;
 
 
-const collisionDiameterSquared = 20 * 20;
+const collisionDiameterSquared = 22 * 22;
 const cos30 = 0.86602540378;
 
 const startY = -10;

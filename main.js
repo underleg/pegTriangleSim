@@ -12,7 +12,6 @@ function loadBackground() {
     app.stage.addChild(s);
 }
 
-
 loadBackground();
 
 createPegBoard();
@@ -45,7 +44,6 @@ app.ticker.add((delta) => {
     updateAllPrizeEmitters(delta);
 
     let gravity = document.getElementById("gravity").value;
-
 
     // ball update loop
     for(i = 0; i < balls.length; ++i) {

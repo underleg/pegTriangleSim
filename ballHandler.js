@@ -83,6 +83,8 @@ function createBall(recordIdx = -1) {
 
     ballcount++;
     let s = PIXI.Sprite.from(name);
+    s.scale.x = 0.75;
+    s.scale.y = 0.75;
     app.stage.addChild(s);
 
     // set ball sprite offset
