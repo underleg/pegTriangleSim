@@ -60,7 +60,16 @@ function createBall(recordIdx = -1) {
         recorded = true;
     }
 
-    let name = "ball.png";
+  let name = "ball_blue.png";
+  let col = 1;
+
+  if ((ballcount % 3) == 0) {
+    name = "ball_gold.png";
+    col = 3;
+  } else if ((ballcount % 2) == 0) {
+    name = "ball_pink.png";
+    col = 2;
+  }
 
     // set ball screen coords
     let y = startY;
@@ -74,7 +83,7 @@ function createBall(recordIdx = -1) {
     // create ball particle emitter
     let emitter = null;
     if (doParticles) {
-        emitter  = createBallEmitter(app.stage);
+        emitter  = createBallEmitter(app.stage, col);
         emitter.emit = true;
         emitter.resetPositionTracking();
         emitter.updateOwnerPos(x, y);

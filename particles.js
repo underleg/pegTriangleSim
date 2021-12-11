@@ -1,4 +1,4 @@
-function createBallEmitter(stage) {
+function createBallEmitter(stage, col) {
    
     pc = new PIXI.ParticleContainer();
     pc.setProperties({
@@ -10,7 +10,22 @@ function createBallEmitter(stage) {
     });
     
     stage.addChild(pc);
-    
+
+  let colour1 = "ffffff";
+  let colour2 = "83cdff";
+  let colour3 = "000000";
+
+  if (col == 1) {
+    colour1 = "cceafa";
+    colour2 = "3872eb";
+  }
+  else if (col == 2) {
+    colour1 = "f9d8fd";
+    colour2 = "eb55df";
+  } else {
+    colour1 = "ffeab5";
+    colour2 = "ffcb4b";
+  }
 
     var emitter = new PIXI.particles.Emitter(
 
@@ -88,15 +103,15 @@ function createBallEmitter(stage) {
                             "list": [
                                 {
                                     "time": 0,
-                                    "value": "ffffff"
+                                "value": colour1
                                 },
                                 {
                                     "time": 0.6,
-                                    "value": "83cdff"
+                                  "value": colour2
                                 },
                                 {
                                     "time": 1.0,
-                                    "value": "000000"
+                                  "value": colour3
                                 }
                             ]
                         }
