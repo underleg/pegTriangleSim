@@ -21,10 +21,10 @@ function createPrizeCounters() {
     const style = new PIXI.TextStyle({
         fontFamily: 'Arial',
         align: "center",
-        fontSize: 10,
+        fontSize: 14,
         fontStyle: 'italic',
         fontWeight: 'bold',
-        fill: ['#000000'], 
+        fill: ['#7FFF7F'], 
     });
 
     let x = (xsize / 2) - (60 * 2.5);
